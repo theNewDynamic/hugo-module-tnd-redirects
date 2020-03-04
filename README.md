@@ -1,0 +1,1 @@
+# Hugo Module for everything server

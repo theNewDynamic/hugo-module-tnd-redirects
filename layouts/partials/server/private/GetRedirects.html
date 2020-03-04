@@ -1,0 +1,15 @@
+{{ $redir := slice }}
+{{ range site.Sites }}
+  {{ range $page := .Pages }}
+    {{ range .Aliases }}
+      {{ $alias := dict "source" . "target" $page.RelPermalink "code" "301" }}
+      {{ $redir = $redir | append $alias }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+{{ with partial "server/public/GetRedirects" }}
+  {{ $redir = $redir | append . }}
+{{ end }}
+
+{{ return $redir }}

@@ -1,0 +1,23 @@
+module:
+  hugoVersion:
+    min: "0.61.0"
+  mounts:
+    - source: layouts
+      target: layouts
+    
+mediaTypes:
+  text/netlify:
+    delimiter: ''
+    suffixes:
+      - ''
+outputFormats:
+  HEADERS:
+    baseName: _headers
+    isPlainText: true
+    mediatype: text/netlify
+    notAlternative: true
+  REDIR:
+    baseName: _redirects
+    isPlainText: true
+    mediatype: text/netlify
+    notAlternative: true
