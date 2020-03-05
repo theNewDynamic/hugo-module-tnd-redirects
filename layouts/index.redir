@@ -1,5 +1,0 @@
-{{- range partialCached "server/private/GetRedirects" "GetRedirects" "GetRedirects" -}}
-  {{- with partialCached "server/private/netlify/GetRule" . . -}}
-    {{- . -}}
-  {{- end }}
-{{ end -}}

@@ -1,0 +1,23 @@
+{{/*
+  GetConfig
+  Retrieve the plugin's config set in the site's Params.
+
+  @author @regisphilibert
+
+  @context Anything (.)
+
+  @access private
+
+  @return Map
+
+  @example - Go Template
+    {{ with partialCached "server/private/GetConfig" . "server_config" }}
+      {{ $config := . }}
+    {{ end }}
+*/}}
+{{ $config := dict }}
+{{ with site.Params.tnd_server }}
+  {{ $config = . }}
+{{ end }}
+
+{{ return $config }}

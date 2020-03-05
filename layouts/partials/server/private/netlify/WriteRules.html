@@ -1,0 +1,28 @@
+{{/*
+  netlify/WriteRules
+  WriteRules following netlify `_redirects` format
+
+  @author @regisphilibert
+
+  @context Any (.)
+
+  @access private
+
+  @return Slice of strings
+
+  @use
+    server/private/GetRedirects
+    server/private/netlify/WriteRule
+
+  @example - Go Template
+    {{ partial "path" context }}
+    {{ partialCached "path" context "variant" }}
+*/}}
+{{ $rules := slice }}
+{{ range partialCached "server/private/GetRedirects" "GetRedirects" "GetRedirects" }}
+  {{ with partialCached "server/private/netlify/WriteRule" . . }}
+    {{ $rules = $rules | append . }}
+  {{ end }}
+{{ end }}
+
+{{ return $rules }}

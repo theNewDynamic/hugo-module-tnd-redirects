@@ -11,12 +11,12 @@ mediaTypes:
     suffixes:
       - ''
 outputFormats:
-  HEADERS:
+  netlify_headers:
     baseName: _headers
     isPlainText: true
     mediatype: text/netlify
     notAlternative: true
-  REDIR:
+  netlify_redir:
     baseName: _redirects
     isPlainText: true
     mediatype: text/netlify

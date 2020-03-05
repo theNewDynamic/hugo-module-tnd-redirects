@@ -1,15 +1,59 @@
-{{ $redir := slice }}
-{{ range site.Sites }}
-  {{ range $page := .Pages }}
-    {{ range .Aliases }}
-      {{ $alias := dict "source" . "target" $page.RelPermalink "code" "301" }}
-      {{ $redir = $redir | append $alias }}
+{{/*
+  GetRedirects
+
+  @author @regisphilibert
+
+  @context Any (.)
+
+  @access private
+
+  @return Slice of maps
+        - String (.source)
+          String (.target)
+          String (.code)
+          String (.country) optional
+          String (.language) optional
+
+  @use 
+    server/private/GetConfig
+    server/private/ParseRule
+    server/AddRedirects
+
+  @example - Go Template
+  {{ $redirects := partialCached "server/private/GetRedirects" "GetRedirects" "GetRedirects" }}
+*/}}
+{{ $redirs := slice }}
+
+{{ $config := partialCached "server/private/GetConfig" "config" "config" }}
+
+{{ if $config.use_aliases }}
+  {{/* We range on Sites to make sure every languages are accounted for */}}
+  {{ range site.Sites }}
+    {{ range $page := .Pages }}
+      {{ range .Aliases }}
+        {{ $rule := dict "source" . "target" $page.RelPermalink "code" "301" }}
+        {{ $redirs = $redirs | append $rule }}
+      {{ end }}
     {{ end }}
   {{ end }}
 {{ end }}
 
-{{ with partial "server/public/GetRedirects" }}
-  {{ $redir = $redir | append . }}
+{{ with $config.redirects }}
+  {{ $redirs = $redirs | append . }}  
 {{ end }}
 
-{{ return $redir }}
+{{/* We fetch the extra redirects from the user's overwritable public "GetRedirects" */}}
+{{ range partial "server/AddRedirects" . }}
+  {{/* append should be able to take a slice as parameter, so we could simply pass the returned value of above partial 
+    as an append argument and expect all its entries to be singlehandedly appended to the collection but... 
+    1. It seems appending a slice will prepend the collection instead of appending
+    2. A current bug seems to type the slice returned by `server/AddRedirects` as a []map[string]interface {}, and append
+       throws an error as we are using the wrong type as "initial" slice.
+  */}}
+  {{ $redirs = $redirs | append . }}
+{{ end }}
+
+{{/* We use apply in order to Parse the entries directly in the slice */}}
+{{ $redirs := apply $redirs "partialCached" "server/private/ParseRule" "." "." }}
+
+{{ return $redirs }}

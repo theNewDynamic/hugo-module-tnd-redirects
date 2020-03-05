@@ -1,6 +1,0 @@
-{{ $rule := printf "%s %s" .source .target }}
-{{ with .code }}
-  {{ $rule = printf "%s %s" $rule . }}
-{{ end }}
-
-{{ return $rule }}

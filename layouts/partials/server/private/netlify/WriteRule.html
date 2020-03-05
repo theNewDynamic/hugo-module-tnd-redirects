@@ -1,0 +1,62 @@
+{{/*
+  WriteRule
+  Given a map detailed below, this will format a string using Netlify's `_redirect` rule format
+
+  @author @regisphilibert
+
+  @context Map
+            String (.source)
+            String (.target)
+            String (.code)
+            String (.language)
+            String (.country)
+            String (.role)
+
+  @access private
+
+  @return String
+
+  @example - Go Template
+    {{- with partialCached "server/private/netlify/WriteRule" . . -}}
+      {{- . -}}
+    {{- end }}
+*/}}
+
+{{/* Some sensible defaults */}}
+
+{{/* $rule is a slice on which we'll append strings. 
+When done, it will be turned into a phrase with delimit */}}
+{{ $rule := slice .source .target }}
+{{ $country := false }}
+{{ $language := false }}
+{{ $role := false }}
+
+
+{{ with .code }}
+  {{ $rule = $rule  | append . }}
+{{ end }}
+
+{{ with .country }}
+  {{ $query := printf "Country=%s" . }}
+  {{ $rule = $rule | append $query }} 
+{{ end }}
+
+{{ with .language }}
+  {{ $query := printf "Language=%s" . }}
+  {{ $rule = $rule | append $query }} 
+{{ end }}
+
+{{ with .role }}
+  {{ $query := printf "Role=%s" . }}
+  {{ $rule = $rule | append $query }} 
+{{ end }}
+
+{{/* We glue each piece of the slice together with whitespaces */}}
+{{ $rule = delimit $rule " " }}
+
+{{/* Netlify does not allow Language and Country query on one rule. This prints a warning if such a rule is printed */}}
+{{ if and .country .language }}
+  {{ warnf "Redirect rule `%s` countains both Country and Language which Netlify does not allow." $rule }}
+{{ end }}
+
+{{ return $rule }}
