@@ -4,18 +4,14 @@ module:
   mounts:
     - source: layouts
       target: layouts
-    
+ 
 mediaTypes:
   text/netlify:
     delimiter: ''
     suffixes:
       - ''
+
 outputFormats:
-  netlify_headers:
-    baseName: _headers
-    isPlainText: true
-    mediatype: text/netlify
-    notAlternative: true
   netlify_redir:
     baseName: _redirects
     isPlainText: true
