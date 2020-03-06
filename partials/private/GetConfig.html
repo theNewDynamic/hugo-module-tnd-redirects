@@ -11,12 +11,12 @@
   @return Map
 
   @example - Go Template
-    {{ with partialCached "server/private/GetConfig" . "server_config" }}
+    {{ with partialCached "tnd-redirects/private/GetConfig" . "server_config" }}
       {{ $config := . }}
     {{ end }}
 */}}
 {{ $config := dict }}
-{{ with site.Params.tnd_server }}
+{{ with site.Params.tnd_redirects }}
   {{ $config = . }}
 {{ end }}
 

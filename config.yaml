@@ -4,6 +4,8 @@ module:
   mounts:
     - source: layouts
       target: layouts
+    - source: partials
+      target: layouts/partials/tnd-redirects
  
 mediaTypes:
   text/netlify:

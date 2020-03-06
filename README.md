@@ -1,11 +1,13 @@
-# Hugo Module for everything server
+# TND Redirects.
 
-## Redirect Headers
+This modules helps create and maintain redirections for your Hugo project. It's designed to scope to multiple services, but only caters for Netlify just now.
 
-We call redirects anything that takes an intial URL to match, the source, and redirect to another destination, the target.
-The module processes a list of rules, defined by the user through either the project's configuration file or a returning partials.
+## What are redirections?
 
-### API
+We call redirection anything that takes an initial URL to match (the _source_), and redirects to another destination, (the _target_).
+The module processes a list of rules, defined by the user through either the project's configuration file or a returning partials and make sure their correctly processed by a given hosting service.
+
+## API
 
 Any given rule properties are defined by the following keys. Those marked by an * are mandatory
 
@@ -16,23 +18,23 @@ __country__: the country if redirection is subject to a country code
 __language__: the language if redirection is subject to a language code
 __role__: the user role if redirection is subject to a user role
 
-### Configuration
+## Configuration
 
-Configuration is set through the site's configurationf file's using the `tnd_server` reserved keys.
+Configuration is set through the site's configurationf file's using the `tnd_redirects` reserved keys.
 
 __use_aliases__: Should the module build redirect rules for entries using Hugo's reserved `aliases` Front Matter key. 
 If so, you should disable Hugo's own Aliases feature with `disableAliases: true`
 __redirects__: A list of custom redirect rules. See below.
 
-### Custom Redirect Headers
+## Adding Custom Redirects
 
-#### Configuration File (hardcoded)
+### Though Configuration File (hardcoded)
 User can add a list of redirects through the site's configuration file. Each rule can use the API's available keys.
 
 ```yaml
 # config.yaml
 params:
-  tnd_server:
+  tnd_redirects:
     redirects:
       - source: /something
         target: /something-else
@@ -41,9 +43,9 @@ params:
         language: fr
 ```
 
-#### Returning Partial (dynamnic)
+### Through a Returning Partial (dynamnic)
 
-In order to add dynamic redirect rules built by Hugo, user can create a dedicated returning patial in the project at `layouts/partials/server/AddRedirects.html`. 
+In order to add dynamic redirect rules built by Hugo, user can create a dedicated returning partial in the project at `layouts/partials/server/AddRedirects.html`. 
 The partial should return a slice of maps which uses the API's available keys.
 
 ##### Example
@@ -80,3 +82,7 @@ Following code add redirect rules for some blog posts so Canadian visitor are re
 
 {{ return $redirs }}
 ```
+
+## Who dat?
+
+This module is created, maintained and loved by [theNewDynamic](https://github.com/theNewDynamic).

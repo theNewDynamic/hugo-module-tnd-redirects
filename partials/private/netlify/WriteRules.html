@@ -19,8 +19,8 @@
     {{ partialCached "path" context "variant" }}
 */}}
 {{ $rules := slice }}
-{{ range partialCached "server/private/GetRedirects" "GetRedirects" "GetRedirects" }}
-  {{ with partialCached "server/private/netlify/WriteRule" . . }}
+{{ range partialCached "tnd-redirects/private/GetRedirects" "GetRedirects" "GetRedirects" }}
+  {{ with partialCached "tnd-redirects/private/netlify/WriteRule" . . }}
     {{ $rules = $rules | append . }}
   {{ end }}
 {{ end }}

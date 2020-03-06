@@ -21,11 +21,11 @@
     server/AddRedirects
 
   @example - Go Template
-  {{ $redirects := partialCached "server/private/GetRedirects" "GetRedirects" "GetRedirects" }}
+  {{ $redirects := partialCached "tnd-redirects/private/GetRedirects" "GetRedirects" "GetRedirects" }}
 */}}
 {{ $redirs := slice }}
 
-{{ $config := partialCached "server/private/GetConfig" "config" "config" }}
+{{ $config := partialCached "tnd-redirects/private/GetConfig" "config" "config" }}
 
 {{ if $config.use_aliases }}
   {{/* We range on Sites to make sure every languages are accounted for */}}
@@ -44,7 +44,7 @@
 {{ end }}
 
 {{/* We fetch the extra redirects from the user's overwritable public "GetRedirects" */}}
-{{ range partial "server/AddRedirects" . }}
+{{ range partial "tnd-redirects/AddRedirects" . }}
   {{/* append should be able to take a slice as parameter, so we could simply pass the returned value of above partial 
     as an append argument and expect all its entries to be singlehandedly appended to the collection but... 
     1. It seems appending a slice will prepend the collection instead of appending
@@ -55,6 +55,6 @@
 {{ end }}
 
 {{/* We use apply in order to Parse the entries directly in the slice */}}
-{{ $redirs := apply $redirs "partialCached" "server/private/ParseRule" "." "." }}
+{{ $redirs := apply $redirs "partialCached" "tnd-redirects/private/ParseRule" "." "." }}
 
 {{ return $redirs }}

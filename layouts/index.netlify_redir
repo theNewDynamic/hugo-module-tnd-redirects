@@ -16,7 +16,7 @@
 
 */}}
 {{- $provider := "netlify" -}}
-{{- $WriteRulePartial := printf "server/private/%s/WriteRules" $provider }}
-{{- range partialCached "server/private/netlify/WriteRules" "WriteRules" "WriteRules" -}}
+{{- $WriteRulePartial := printf "tnd-redirects/private/%s/WriteRules" $provider }}
+{{- range partialCached "tnd-redirects/private/netlify/WriteRules" "WriteRules" "WriteRules" -}}
   {{ . }}
 {{ end -}}
