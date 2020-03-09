@@ -22,9 +22,27 @@ __role__: the user role if redirection is subject to a user role
 
 Configuration is set through the site's configurationf file's using the `tnd_redirects` reserved keys.
 
-__use_aliases__: Should the module build redirect rules for entries using Hugo's reserved `aliases` Front Matter key. 
+### use_aliases 
+
+Should the module build redirect rules for entries using Hugo's reserved `aliases` Front Matter key. 
 If so, you should disable Hugo's own Aliases feature with `disableAliases: true`
-__redirects__: A list of custom redirect rules. See below.
+
+```yaml
+# config.yaml
+
+disableAliases: true
+
+params:
+  tnd_redirects:
+    use_aliases: true
+```
+
+
+
+
+### redirects
+
+A list of custom redirect rules. See below.
 
 ## Adding Custom Redirects
 
