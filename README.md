@@ -14,6 +14,7 @@ Any given rule properties are defined by the following keys. Those marked by an 
 __source__\*: the URL to match
 __target__\*: the destination
 __code__: the status code (default: 301)
+__force__: Is it a force redirect? (default: false)
 __country__: the country if redirection is subject to a country code
 __language__: the language if redirection is subject to a language code
 __role__: the user role if redirection is subject to a user role

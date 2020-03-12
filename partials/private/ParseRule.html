@@ -7,7 +7,8 @@
   @context Map
             String (.source)
             String (.target)
-            String (.code) optional
+            String/Int (.code) optional
+            Bool (.force) optional
             String (.language) optional
             String (.country) optional
             String (.role) optional
@@ -16,6 +17,7 @@
             String (.source)
             String (.target)
             String (.code)
+            Bool (.force)
             String (.language)
             String (.country)
             String (.role)
@@ -30,6 +32,7 @@
 {{ $rule := dict }}
 
 {{ $code := "301" }}
+{{ $force := false }}
 {{ $source := "" }}
 {{ $target := "" }}
 {{ $language := "" }}
@@ -45,7 +48,13 @@
 {{ end }}
 
 {{ with .code }}
-  {{ $code = . }}
+  {{/* Depending on config language, code could be int or string
+    We make sure we return a string to avoid type error. */}}
+  {{ $code = . | string }}
+{{ end }}
+
+{{ with .force }}
+  {{ $force = . }}
 {{ end }}
 
 {{ with .country }}
@@ -64,7 +73,7 @@
 {{ if and $source $target }}
   {{/* We only print with different source and target value and print a warning for every rule failing this test */}}
   {{ if ne $source $target }}
-    {{ $rule = dict "source" $source "target" $target "code" $code "country" $country "language" $language "role" $role }}
+    {{ $rule = dict "source" $source "target" $target "code" $code "force" $force "country" $country "language" $language "role" $role }}
   {{ else }}
     {{ warnf "A redirect rule with equal source and target (%s) was not printed" $source }}
   {{ end }}
