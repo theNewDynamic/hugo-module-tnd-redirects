@@ -33,7 +33,12 @@ When done, it will be turned into a phrase with delimit */}}
 
 
 {{ with .code }}
-  {{ $rule = $rule  | append . }}
+  {{ $code := . }}
+  {{/* Netlify format requires a ! appended to the code for force redirects */}}
+  {{ with $.force }}
+    {{ $code = printf "%s!" $code }}
+  {{ end }}
+  {{ $rule = $rule | append $code }}
 {{ end }}
 
 {{ with .country }}
@@ -56,7 +61,7 @@ When done, it will be turned into a phrase with delimit */}}
 
 {{/* Netlify does not allow Language and Country query on one rule. This prints a warning if such a rule is printed */}}
 {{ if and .country .language }}
-  {{ warnf "Redirect rule `%s` countains both Country and Language which Netlify does not allow." $rule }}
+  {{ warnf "Redirect rule `%s` countains both Country and Language while Netlify only allow one of each per rule." $rule }}
 {{ end }}
 
 {{ return $rule }}
