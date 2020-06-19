@@ -11,13 +11,13 @@ The module processes a list of rules, defined by the user through either the pro
 
 Any given rule properties are defined by the following keys. Those marked by an * are mandatory
 
-__source__\*: the URL to match
-__target__\*: the destination
-__code__: the status code (default: 301)
-__force__: Is it a force redirect? (default: false)
-__country__: the country if redirection is subject to a country code
-__language__: the language if redirection is subject to a language code
-__role__: the user role if redirection is subject to a user role
+- __source__\*: the URL to match
+- __target__\*: the destination
+- __code__: the status code (default: 301)
+- __force__: Is it a force redirect? (default: false)
+- __country__: the country if redirection is subject to a country code
+- __language__: the language if redirection is subject to a language code
+- __role__: the user role if redirection is subject to a user role
 
 ## Configuration
 
@@ -46,7 +46,7 @@ params:
 
 ### Through a Returning Partial (dynamnic)
 
-In order to add dynamic redirect rules built by Hugo, user can create a dedicated returning partial in the project at `layouts/partials/server/AddRedirects.html`. 
+In order to add dynamic redirect rules built by Hugo, user can create a dedicated returning partial in the project at `layouts/partials/tnd-redirects/AddRedirects.html`. 
 The partial should return a slice of maps which uses the API's available keys.
 
 ##### Example
