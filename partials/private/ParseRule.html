@@ -69,16 +69,17 @@
   {{ $role = . }}
 {{ end }}
 
+{{ $warn_head := "\nHugo Module TND Redirects:\n" }}
 {{/* We only print the rule if both origin and target are set and print a warning for every rule failing this test */}}
 {{ if and $origin $target }}
   {{/* We only print with different origin and target value and print a warning for every rule failing this test */}}
   {{ if ne $origin $target }}
     {{ $rule = dict "origin" $origin "target" $target "code" $code "force" $force "country" $country "language" $language "role" $role }}
   {{ else }}
-    {{ warnf "A redirect rule with equal origin and target (%s) was not printed" $origin }}
+    {{ warnf "%vA redirect rule with equal origin and target (%s) was not printed" $warn_head $origin }}
   {{ end }}
 {{ else }}
-  {{ warnf "A redirect rule missing either origin or target or both was not printed "  }}
+  {{ warnf "%vA redirect rule missing either origin or target or both was not printed." $warn_head }}
 {{ end }}
 
 {{ return $rule }}
