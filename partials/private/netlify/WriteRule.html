@@ -5,7 +5,7 @@
   @author @regisphilibert
 
   @context Map
-            String (.source)
+            String (.origin)
             String (.target)
             String (.code)
             String (.language)
@@ -26,7 +26,7 @@
 
 {{/* $rule is a slice on which we'll append strings. 
 When done, it will be turned into a phrase with delimit */}}
-{{ $rule := slice .source .target }}
+{{ $rule := slice .origin .target }}
 {{ $country := false }}
 {{ $language := false }}
 {{ $role := false }}

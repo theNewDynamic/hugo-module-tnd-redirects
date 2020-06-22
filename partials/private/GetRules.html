@@ -1,0 +1,36 @@
+{{/*
+  GetRules
+  Retrieve the list of "written" rules following service's own "WriteRule" partial
+
+  @author @regisphilibert
+
+  @context Any (.)
+
+  @access private
+
+  @return Slice of strings
+
+  @use
+    tnd-redirects/private/GetRedirects
+    tnd-redirects/private/{service}/WriteRule
+
+  @example - Go Template
+  {{- range partialCached "tnd-redirects/private/GetRules" "netlify" "netlify" -}}
+    {{ . }}
+  {{ end -}}
+*/}}
+{{ $rules := slice }}
+{{ $service := . }}
+{{ $serviceWriteRulePartial := print "tnd-redirects/private/" $service "/WriteRule.html" }}
+{{ if templates.Exists (print "partials/" $serviceWriteRulePartial) }}
+  {{ range partialCached "tnd-redirects/private/GetRedirects" "GetRedirects" }}
+    {{ with partialCached $serviceWriteRulePartial . . }}
+      {{ $rules = $rules | append . }}
+    {{ end }}
+  {{ end }}
+{{ else }}
+  {{ warnf "\nHugo Module TND Redirects:\n%s is not currently supported. As a result, no redirect rules has been produced. \nPlease refer to module's README for list of available services" $service }}
+{{ end }}
+
+
+{{ return $rules }}

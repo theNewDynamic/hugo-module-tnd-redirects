@@ -9,30 +9,29 @@
   @access private
 
   @return Slice of maps
-        - String (.source)
+        - String (.origin)
           String (.target)
           String (.code)
           String (.country) optional
           String (.language) optional
 
   @use 
-    server/private/GetConfig
-    server/private/ParseRule
-    server/AddRedirects
+    tnd-redirects/private/GetConfig
+    tnd-redirects/private/ParseRule
+    tnd-redirects/AddRedirects
 
   @example - Go Template
   {{ $redirects := partialCached "tnd-redirects/private/GetRedirects" "GetRedirects" "GetRedirects" }}
 */}}
 {{ $redirs := slice }}
 
-{{ $config := partialCached "tnd-redirects/private/GetConfig" "config" "config" }}
-
+{{ $config := partialCached "tnd-redirects/private/GetConfig" "GetConfig" }}
 {{ if $config.use_aliases }}
   {{/* We range on Sites to make sure every languages are accounted for */}}
   {{ range site.Sites }}
     {{ range $page := .Pages }}
       {{ range .Aliases }}
-        {{ $rule := dict "source" . "target" $page.RelPermalink "code" "301" }}
+        {{ $rule := dict "origin" . "target" $page.RelPermalink "code" "301" }}
         {{ $redirs = $redirs | append $rule }}
       {{ end }}
     {{ end }}
@@ -56,5 +55,4 @@
 
 {{/* We use apply in order to Parse the entries directly in the slice */}}
 {{ $redirs := apply $redirs "partialCached" "tnd-redirects/private/ParseRule" "." "." }}
-
 {{ return $redirs }}

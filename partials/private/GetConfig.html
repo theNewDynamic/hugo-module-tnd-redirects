@@ -11,7 +11,7 @@
   @return Map
 
   @example - Go Template
-    {{ with partialCached "tnd-redirects/private/GetConfig" . "server_config" }}
+    {{ with partialCached "tnd-redirects/private/GetConfig" "GetConfig" }}
       {{ $config := . }}
     {{ end }}
 */}}

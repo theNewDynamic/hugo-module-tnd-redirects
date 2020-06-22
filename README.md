@@ -1,17 +1,56 @@
-# TND Redirects.
+# TND Redirects Hugo Module
 
-This modules helps create and maintain redirections for your Hugo project. It's designed to scope to multiple services, but only caters for Netlify just now.
+This module helps create and maintain redirections for your Hugo project using Hugo's aliases params or a set of custom redirect rules added either via configutation or a dynamic returning partial on the project's level.
+
+It supports beautiful Netlify but should scope out to more services in the future.
 
 ## What are redirections?
 
-We call redirection anything that takes an initial URL to match (the _source_), and redirects to another destination, (the _target_).
+We call redirection anything that takes an initial URL to match (the _origin_), and redirects to another destination, (the _target_).
 The module processes a list of rules, defined by the user through either the project's configuration file or a returning partials and make sure their correctly processed by a given hosting service.
+
+## Quick setup
+
+## 1. Add module to your project's imports:
+
+```yaml
+# config.yaml
+module:
+  imports:
+    - path: github.com/theNewDynamic/hugo-module-tnd-redirects
+```
+
+### 2. Add redirect output format for chosen service.
+
+#### Netlify
+
+Set configuration so Hugo produces the redirections file at the root of the site (on the Homepage)
+
+```yaml
+# config.yaml
+
+outputs:
+  homepage: 
+    - HTML
+    - netlify_redir
+    # + any other outputs needed on the homepage.
+```
+OR
+
+```yaml
+# content/_index.md
+title: Homepage
+homepage: 
+  - HTML
+  - netlify_redir
+  # + any other outputs needed on the homepage.
+```
 
 ## API
 
 Any given rule properties are defined by the following keys. Those marked by an * are mandatory
 
-- __source__\*: the URL to match
+- __origin__\*: the URL to match
 - __target__\*: the destination
 - __code__: the status code (default: 301)
 - __force__: Is it a force redirect? (default: false)
@@ -37,9 +76,9 @@ User can add a list of redirects through the site's configuration file. Each rul
 params:
   tnd_redirects:
     redirects:
-      - source: /something
+      - origin: /something
         target: /something-else
-      - source: /contact
+      - origin: /contact
         target: /fr/contact
         language: fr
 ```
@@ -74,8 +113,8 @@ Following code add redirect rules for some blog posts so Canadian visitor are re
 {{ $posts := where site.RegularPages "Params.redirect_ca" "==" true }}
 
 {{ range $posts }}
-  {{/* We create a map for a rule with source, target and country key*/}}
-  {{ $rule := dict "source" .RelPermalink "target" "/canadian-regulation" "country" "ca" }}
+  {{/* We create a map for a rule with origin, target and country key*/}}
+  {{ $rule := dict "origin" .RelPermalink "target" "/canadian-regulation" "country" "ca" }}
 
   {{/* We add the rule's map to the $redirs slice */}}
   {{ $redirs = $redirs | append $rule }}

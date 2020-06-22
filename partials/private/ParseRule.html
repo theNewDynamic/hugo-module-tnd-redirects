@@ -5,7 +5,7 @@
   @author @regisphilibert
 
   @context Map
-            String (.source)
+            String (.origin)
             String (.target)
             String/Int (.code) optional
             Bool (.force) optional
@@ -14,7 +14,7 @@
             String (.role) optional
 
   @return Map
-            String (.source)
+            String (.origin)
             String (.target)
             String (.code)
             Bool (.force)
@@ -33,14 +33,14 @@
 
 {{ $code := "301" }}
 {{ $force := false }}
-{{ $source := "" }}
+{{ $origin := "" }}
 {{ $target := "" }}
 {{ $language := "" }}
 {{ $country := "" }}
 {{ $role := "" }}
 
-{{ with .source }}
-  {{ $source = . }}
+{{ with .origin }}
+  {{ $origin = . }}
 {{ end }}
 
 {{ with .target }}
@@ -69,16 +69,16 @@
   {{ $role = . }}
 {{ end }}
 
-{{/* We only print the rule if both source and target are set and print a warning for every rule failing this test */}}
-{{ if and $source $target }}
-  {{/* We only print with different source and target value and print a warning for every rule failing this test */}}
-  {{ if ne $source $target }}
-    {{ $rule = dict "source" $source "target" $target "code" $code "force" $force "country" $country "language" $language "role" $role }}
+{{/* We only print the rule if both origin and target are set and print a warning for every rule failing this test */}}
+{{ if and $origin $target }}
+  {{/* We only print with different origin and target value and print a warning for every rule failing this test */}}
+  {{ if ne $origin $target }}
+    {{ $rule = dict "origin" $origin "target" $target "code" $code "force" $force "country" $country "language" $language "role" $role }}
   {{ else }}
-    {{ warnf "A redirect rule with equal source and target (%s) was not printed" $source }}
+    {{ warnf "A redirect rule with equal origin and target (%s) was not printed" $origin }}
   {{ end }}
 {{ else }}
-  {{ warnf "A redirect rule missing either source or target or both was not printed "  }}
+  {{ warnf "A redirect rule missing either origin or target or both was not printed "  }}
 {{ end }}
 
 {{ return $rule }}

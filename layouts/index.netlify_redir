@@ -1,22 +1,13 @@
 {{/*
-  Template for Redirect Output Format. This is used to produce the `_redirect` file
+  Template for Netlify's Redirect Output Format. This is used to produce the `_redirect` file
 
   @author @regisphilibert
 
   @context Any (.)
 
-  @access private
-
-  @return Slice of maps
-        - String (.source)
-          String (.target)
-          String (.code)
-          String (.country) optional
-          String (.language) optional
+  @access public
 
 */}}
-{{- $provider := "netlify" -}}
-{{- $WriteRulePartial := printf "tnd-redirects/private/%s/WriteRules" $provider }}
-{{- range partialCached "tnd-redirects/private/netlify/WriteRules" "WriteRules" "WriteRules" -}}
+{{- range partialCached "tnd-redirects/private/GetRules" "netlify" "netlify" -}}
   {{ . }}
 {{ end -}}
