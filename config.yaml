@@ -14,7 +14,7 @@ mediaTypes:
       - ''
 
 outputFormats:
-  netlify_redir:
+  tnd_redirects_netlify:
     baseName: _redirects
     isPlainText: true
     mediatype: text/netlify
