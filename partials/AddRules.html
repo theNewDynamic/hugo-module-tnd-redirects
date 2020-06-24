@@ -1,15 +1,16 @@
 {{/*
-  AddRedirects
+  AddRules
 
   This partial is to be overwritten by user in own project to add a dynamically build list of rules to extend
   the module's own.
-  For add a set of non dynamic rules, use `redirects` site config.
+
+  IMPORTANT: This should always return a slice!
 
   See README for an example.
 
   @author {GitHub handle}
 
-  @context Any (.)
+  @context None (for `.Site`, `.Sites` and `.Hugo` use global functions `site`, `site.Sites` and `hugo`)
 
   @access public
 

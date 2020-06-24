@@ -1,6 +1,6 @@
 {{/*
   GetRules
-  Retrieve the list of "written" rules following service's own "WriteRule" partial
+  Build an array of redirect/rewrite rules
 
   @author @regisphilibert
 
@@ -8,30 +8,62 @@
 
   @access private
 
-  @return Slice of strings
+  @return Slice of maps
+        - String (.origin)
+          String (.target)
+          String (.code)
+          String (.country) optional
+          String (.language) optional
 
-  @use
-    tnd-redirects/private/GetRedirects
-    tnd-redirects/private/{service}/WriteRule
+  @use 
+    tnd-redirects/private/GetConfig
+    tnd-redirects/private/ParseRule
+    tnd-redirects/AddRules
 
   @example - Go Template
-  {{- range partialCached "tnd-redirects/private/GetRules" "netlify" "netlify" -}}
-    {{ . }}
-  {{ end -}}
+  {{ $redirects := partialCached "tnd-redirects/private/GetRules" "GetRules" }}
 */}}
-{{ $rules := slice }}
-{{ $service := . }}
-{{ $warn_head := "\nHugo Module TND Redirects:\n" }}
-{{ $serviceWriteRulePartial := print "tnd-redirects/private/" $service "/WriteRule.html" }}
-{{ if templates.Exists (print "partials/" $serviceWriteRulePartial) }}
-  {{ range partialCached "tnd-redirects/private/GetRedirects" "GetRedirects" }}
-    {{ with partialCached $serviceWriteRulePartial . . }}
-      {{ $rules = $rules | append . }}
+{{ $redirs := slice }}
+
+{{ $config := partialCached "tnd-redirects/private/GetConfig" "GetConfig" }}
+{{ if $config.use_aliases }}
+  {{/* We range on Sites to make sure every languages are accounted for */}}
+  {{ range site.Sites }}
+    {{ range $page := .Pages }}
+      {{ range .Aliases }}
+        {{ $rule := dict "origin" . "target" $page.RelPermalink "code" "301" }}
+        {{ $redirs = $redirs | append $rule }}
+      {{ end }}
     {{ end }}
   {{ end }}
+{{ end }}
+{{ $warn_head := "\nHugo Module TND Redirects:\n" }}
+{{ with $config.redirects }}
+  {{ warnf "%s`redirects` configuration parameter is deprecated and should be replaced by `rules`" $warn_head }}
+  {{ $redirs = $redirs | append . }}
 {{ else }}
-  {{ warnf "%s%s is not currently supported. As a result, no redirect rules has been produced. \nPlease refer to module's README for list of available services" $warn_head $service }}
+  {{ with $config.rules }}
+    {{ $redirs = $redirs | append . }}
+  {{ end }}
+{{ end }}
+
+{{/* We fetch the complementary rules from the overwritable public "AddRules" */}}
+{{ $AddRules := partial "tnd-redirects/AddRules" "AddRule" }}
+{{ if reflect.IsSlice $AddRules }}
+  {{ range $AddRules }}
+    {{/* append should be able to take a slice as parameter, so we could simply pass the returned value of above partial 
+      as an append argument and expect all its entries to be singlehandedly appended to the collection but... 
+      1. It seems appending a slice will prepend the collection instead of appending
+      2. A current bug seems to type the slice returned by `tnd-redirects/AddRules` as a []map[string]interface {}, and append
+        throws an error as we are using the wrong type as "initial" slice.
+    */}}
+    {{ $redirs = $redirs | append . }}
+  {{ end }}
+{{ else }}
+  {{ errorf "%sProject's own tnd-redirects/AddRules partial returns wrong type, slice expected." $warn_head }}
 {{ end }}
 
 
-{{ return $rules }}
+{{/* We use apply in order to Parse the entries directly in the slice */}}
+{{ $redirs := apply $redirs "partialCached" "tnd-redirects/private/ParseRule" "." "." }}
+{{ return $redirs }}

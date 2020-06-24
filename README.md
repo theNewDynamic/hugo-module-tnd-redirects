@@ -75,7 +75,7 @@ User can add a list of redirects through the site's configuration file. Each rul
 # config.yaml
 params:
   tnd_redirects:
-    redirects:
+    rules:
       - origin: /something
         target: /something-else
       - origin: /contact
@@ -85,7 +85,7 @@ params:
 
 ### Through a Returning Partial (dynamnic)
 
-In order to add dynamic redirect rules built by Hugo, user can create a dedicated returning partial in the project at `layouts/partials/tnd-redirects/AddRedirects.html`. 
+In order to add dynamic redirect rules built by Hugo, user can create a dedicated returning partial in the project at `layouts/partials/tnd-redirects/AddRules.html`. 
 The partial should return a slice of maps which uses the API's available keys.
 
 ##### Example

@@ -8,6 +8,6 @@
   @access public
 
 */}}
-{{- range partialCached "tnd-redirects/private/GetRules" "netlify" "netlify" -}}
+{{- range partialCached "tnd-redirects/private/GetFormattedRules" "netlify" "netlify" -}}
   {{ . }}
 {{ end -}}

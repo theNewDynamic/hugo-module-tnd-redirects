@@ -1,0 +1,37 @@
+{{/*
+  GetFormattedRules
+  Retrieve the list of "Formatted" rules following service's own "FormatRule" partial
+
+  @author @regisphilibert
+
+  @context Any (.)
+
+  @access private
+
+  @return Slice of strings
+
+  @use
+    tnd-redirects/private/GetRules
+    tnd-redirects/private/{service}/FormatRule
+
+  @example - Go Template
+  {{- range partialCached "tnd-redirects/private/GetRules" "netlify" "netlify" -}}
+    {{ . }}
+  {{ end -}}
+*/}}
+{{ $rules := slice }}
+{{ $service := . }}
+{{ $warn_head := "\nHugo Module TND Redirects:\n" }}
+{{ $serviceWriteRulePartial := print "tnd-redirects/private/" $service "/FormatRule.html" }}
+{{ if templates.Exists (print "partials/" $serviceWriteRulePartial) }}
+  {{ range partialCached "tnd-redirects/private/GetRules" "GetRules" }}
+    {{ with partialCached $serviceWriteRulePartial . . }}
+      {{ $rules = $rules | append . }}
+    {{ end }}
+  {{ end }}
+{{ else }}
+  {{ warnf "%s%s is not currently supported. As a result, no redirect rules has been produced. \nPlease refer to module's README for list of available services" $warn_head $service }}
+{{ end }}
+
+
+{{ return $rules }}
