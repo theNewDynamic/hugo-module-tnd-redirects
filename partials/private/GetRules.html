@@ -37,9 +37,9 @@
     {{ end }}
   {{ end }}
 {{ end }}
-{{ $warn_head := "\nHugo Module TND Redirects:\n" }}
 {{ with $config.redirects }}
-  {{ warnf "%s`redirects` configuration parameter is deprecated and should be replaced by `rules`" $warn_head }}
+  {{ $warn := printf "%s`redirects` configuration parameter is deprecated and should be replaced by `rules`" }}
+  {{ partial "tnd-redirects/warn" $warn }}
   {{ $redirs = $redirs | append . }}
 {{ else }}
   {{ with $config.rules }}
@@ -60,7 +60,8 @@
     {{ $redirs = $redirs | append . }}
   {{ end }}
 {{ else }}
-  {{ errorf "%sProject's own tnd-redirects/AddRules partial returns wrong type, slice expected." $warn_head }}
+  {{ $err := "Project's own tnd-redirects/AddRules partial returns wrong type, slice expected." }}
+  {{ partial "tnd-redirects/err" $err }}
 {{ end }}
 
 

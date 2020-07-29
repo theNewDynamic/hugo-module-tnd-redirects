@@ -30,7 +30,8 @@
     {{ end }}
   {{ end }}
 {{ else }}
-  {{ warnf "%s%s is not currently supported. As a result, no redirect rules has been produced. \nPlease refer to module's README for list of available services" $warn_head $service }}
+  {{ $warn := printf "%s is not currently supported. As a result, no redirect rules has been produced. \nPlease refer to module's README for list of available services" $service }}
+  {{ partial "tnd-redirects/warn" $warn }}
 {{ end }}
 
 

@@ -1,0 +1,23 @@
+{{/*
+  GetInfo
+  Retrieve the module's information (metadata) for global usage.
+
+  @author @regisphilibert
+
+  @context Anything (.)
+
+  @access private
+
+  @return Map
+
+  @example - Go Template
+    {{ with partialCached "tnd-redirects/private/GetConfig" "GetConfig" }}
+      {{ $config := . }}
+    {{ end }}
+*/}}
+{{ $info := `
+name: TND Module Redirects
+shorthand: redirects
+` | transform.Unmarshal }}
+
+{{ return $info }}

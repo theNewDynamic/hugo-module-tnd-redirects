@@ -6,6 +6,10 @@ module:
       target: layouts
     - source: partials
       target: layouts/partials/tnd-redirects
+    - source: console
+      target: layouts/partials/tnd-redirects
+  imports:
+    - path: github.com/theNewDynamic/hugo-module-tnd-console
  
 mediaTypes:
   text/netlify:
