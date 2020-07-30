@@ -1,5 +1,5 @@
 {{/*
-  WriteRule
+  netlify/FormatRule
   Given a map detailed below, this will format a string using Netlify's `_redirect` rule format
 
   @author @regisphilibert
@@ -8,6 +8,7 @@
             String (.origin)
             String (.target)
             String (.code)
+            Bool (.force)
             String (.language)
             String (.country)
             String (.role)
@@ -58,10 +59,10 @@ When done, it will be turned into a phrase with delimit */}}
 
 {{/* We glue each piece of the slice together with whitespaces */}}
 {{ $rule = delimit $rule " " }}
-{{ $warn_head := "\nHugo Module TND Redirects:\n" }}
 {{/* Netlify does not allow Language and Country query on one rule. This prints a warning if such a rule is printed */}}
 {{ if and .country .language }}
-  {{ warnf "%sRedirect rule `%s` contains both Country and Language while Netlify only allow one of each per rule." $warn_head $rule }}
+  {{ $warn := "Redirect rule `%s` contains both Country and Language while Netlify only allow one of each per rule." $rule }}
+  {{ partial "tnd-redirects/warn" $warn }}
 {{ end }}
 
 {{ return $rule }}

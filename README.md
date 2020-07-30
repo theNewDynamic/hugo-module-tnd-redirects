@@ -32,7 +32,7 @@ Set configuration so Hugo produces the redirections file at the root of the site
 outputs:
   homepage: 
     - HTML
-    - netlify_redir
+    - tnd_hredirects_netlify
     # + any other outputs needed on the homepage.
 ```
 OR
@@ -42,7 +42,7 @@ OR
 title: Homepage
 homepage: 
   - HTML
-  - netlify_redir
+  - tnd_redirects_netlify
   # + any other outputs needed on the homepage.
 ```
 
@@ -123,6 +123,6 @@ Following code add redirect rules for some blog posts so Canadian visitor are re
 {{ return $redirs }}
 ```
 
-## Who dat?
+## theNewDynamic
 
 This module is created, maintained and loved by [theNewDynamic](https://github.com/theNewDynamic).
