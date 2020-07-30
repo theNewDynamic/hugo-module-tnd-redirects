@@ -1,6 +1,6 @@
 {{/*
-  GetInfo
-  Retrieve the module's information (metadata) for global usage.
+  GetConfig
+  Retrieve the plugin's config set in the site's Params.
 
   @author @regisphilibert
 
@@ -15,9 +15,9 @@
       {{ $config := . }}
     {{ end }}
 */}}
-{{ $info := `
-name: TND Module Redirects
-shorthand: redirects
-` | transform.Unmarshal }}
+{{ $config := dict }}
+{{ with site.Params.tnd_redirects }}
+  {{ $config = . }}
+{{ end }}
 
-{{ return $info }}
+{{ return $config }}
