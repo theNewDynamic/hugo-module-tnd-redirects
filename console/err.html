@@ -1,25 +1,17 @@
 {{/*
   err
-  Emits an error using tnd-console module
+  Emits a warning using the module's Header.
 
   @author @regisphilibert
 
   @context String
 
-  @use
-    - tnd-console/console
-
   @access public
 
   @example - Go Template
-  {{ partial "tnd-redirects/err" $message }}
+  {{ partial "tnd-redirects/warn" $message }}
 */}}
-{{ $header := "" }}
-{{ with partialCached "tnd-redirects/GetInfo" "GetInfo" }}
-  {{ with .name }}
-    {{ $header = . }}
-  {{ end }}
-{{ end }}
-{{ partialCached "tnd-console/console" (dict "header" $header "message" . "type" "error") . }}
+{{ $header := "TND Module Redirects" }}
+{{ errorf "\n%s:\n%s" $header . }}
 
 {{ return true }}
