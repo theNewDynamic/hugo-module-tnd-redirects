@@ -32,7 +32,7 @@ Set configuration so Hugo produces the redirections file at the root of the site
 outputs:
   homepage: 
     - HTML
-    - tnd_hredirects_netlify
+    - tnd_redirects_netlify
     # + any other outputs needed on the homepage.
 ```
 OR
