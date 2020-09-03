@@ -76,11 +76,11 @@
     {{ $rule = dict "origin" $origin "target" $target "code" $code "force" $force "country" $country "language" $language "role" $role }}
   {{ else }}
   {{ $warn1 := printf "A redirect rule with equal origin and target (%s) was not printed" $origin }}
-  {{ partial "tnd-redirects/err" $warn1 }}
+  {{ partial "tnd-redirects/warn" $warn1 }}
   {{ end }}
 {{ else }}
   {{ $warn2 := "A redirect rule missing either origin or target or both was not printed." }}
-  {{ partial "tnd-redirects/err" $warn2 }}
+  {{ partial "tnd-redirects/warn" $warn2 }}
 {{ end }}
 
 {{ return $rule }}
