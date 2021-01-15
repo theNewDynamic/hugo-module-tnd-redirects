@@ -27,11 +27,15 @@
 
 {{/* $rule is a slice on which we'll append strings. 
 When done, it will be turned into a phrase with delimit */}}
-{{ $rule := slice .origin .target }}
+{{ $output_rule := "" }}
+{{ $rule := slice }}
+{{ if and .origin .target }}
+  {{ $rule = slice .origin .target }}
+{{ end }}
 {{ $country := false }}
 {{ $language := false }}
 {{ $role := false }}
-
+{{ $comment := false }}
 
 {{ with .code }}
   {{ $code := . }}
@@ -57,12 +61,30 @@ When done, it will be turned into a phrase with delimit */}}
   {{ $rule = $rule | append $query }} 
 {{ end }}
 
-{{/* We glue each piece of the slice together with whitespaces */}}
-{{ $rule = delimit $rule " " }}
+{{ with .comment }}
+  {{ $comment = printf "# %s" . }}
+{{ end }}
+
+
+{{ with $rule }}
+  {{/* We glue each piece of the slice together with whitespaces */}}
+  {{ $output_rule = delimit . " " }}
+
+  {{/* If we have a comment on top of the rule, add it before the rule */}}
+  {{ with $comment }}
+    {{ $output_rule = printf "%s\n%s" . $output_rule }}
+  {{ end }}
+{{ else }}
+  {{/* If we have a comment but no rule, we just print the comment */}}
+  {{ with $comment }}
+    {{ $output_rule = . }}
+  {{ end }}
+{{ end }}
+
 {{/* Netlify does not allow Language and Country query on one rule. This prints a warning if such a rule is printed */}}
 {{ if and .country .language }}
   {{ $warn := "Redirect rule `%s` contains both Country and Language while Netlify only allow one of each per rule." $rule }}
   {{ partial "tnd-redirects/warn" $warn }}
 {{ end }}
 
-{{ return $rule }}
+{{ return $output_rule }}

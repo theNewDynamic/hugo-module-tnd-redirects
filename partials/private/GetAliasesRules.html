@@ -1,0 +1,29 @@
+{{/*
+  GetAliasesRules
+
+  @author @regisphilibert
+
+  @context Any (.)
+
+  @access private
+
+  @return Slice of maps
+        - String (.origin)
+          String (.target)
+          String (.code)
+  @use 
+    - tnd-redirects/private/GetConfig
+*/}}
+{{ $aliases := slice }}
+{{ $config := partialCached "tnd-redirects/private/GetConfig" "GetConfig" }}
+{{ if $config.use_aliases }}
+  {{ range site.Sites }}
+    {{ range $page := .Pages }}
+      {{ range .Aliases }}
+        {{ $aliases = $aliases | append (dict "origin" . "target" $page.RelPermalink "code" "301") }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+{{ return $aliases }}

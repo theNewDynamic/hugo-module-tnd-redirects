@@ -12,6 +12,7 @@
             String (.language) optional
             String (.country) optional
             String (.role) optional
+            String (.comment) optional
 
   @return Map
             String (.origin)
@@ -21,6 +22,7 @@
             String (.language)
             String (.country)
             String (.role)
+            String (.comment)
 
   @access private
 
@@ -38,6 +40,7 @@
 {{ $language := "" }}
 {{ $country := "" }}
 {{ $role := "" }}
+{{ $comment := "" }}
 
 {{ with .origin }}
   {{ $origin = . }}
@@ -69,15 +72,21 @@
   {{ $role = . }}
 {{ end }}
 
+{{ with .comment }}
+  {{ $comment = . }}
+{{ end }}
+
 {{/* We only print the rule if both origin and target are set and print a warning for every rule failing this test */}}
 {{ if and $origin $target }}
   {{/* We only print with different origin and target value and print a warning for every rule failing this test */}}
   {{ if ne $origin $target }}
-    {{ $rule = dict "origin" $origin "target" $target "code" $code "force" $force "country" $country "language" $language "role" $role }}
+    {{ $rule = dict "origin" $origin "target" $target "code" $code "force" $force "country" $country "language" $language "role" $role "comment" $comment }}
   {{ else }}
   {{ $warn1 := printf "A redirect rule with equal origin and target (%s) was not printed" $origin }}
   {{ partial "tnd-redirects/warn" $warn1 }}
   {{ end }}
+{{ else if $comment }}
+    {{ $rule = dict "comment" $comment }}
 {{ else }}
   {{ $warn2 := "A redirect rule missing either origin or target or both was not printed." }}
   {{ partial "tnd-redirects/warn" $warn2 }}
