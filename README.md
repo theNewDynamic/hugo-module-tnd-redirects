@@ -40,7 +40,7 @@ OR
 ```yaml
 # content/_index.md
 title: Homepage
-homepage: 
+outputs: 
   - HTML
   - tnd_redirects_netlify
   # + any other outputs needed on the homepage.
